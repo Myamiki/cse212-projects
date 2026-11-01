@@ -6,15 +6,23 @@ public static class Arrays
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
-    public static double[] MultiplesOf(double number, int length)
-    {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+public static double[] MultiplesOf(double number, int length)
+{
+    // Step 1: Create an array with enough spaces to hold the requested number of multiples.
+double[] multiples = new double[length];
 
-        return []; // replace this return statement with your own
+    // Step 2: Use a for loop starting at index 0 and repeat until all array positions have been visited.
+    for (int i = 0; i < length; i++)
+    {
+        // Step 3: Multiply the starting number by the loop position plus one.
+        // Step 4: Store each calculated multiple in its correct array position.
+        multiples[i] = number * (i + 1);
     }
+
+    // Step 5: Return the completed array.
+
+    return multiples;
+}
 
     /// <summary>
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
@@ -23,11 +31,18 @@ public static class Arrays
     ///
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
-    public static void RotateListRight(List<int> data, int amount)
-    {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
-    }
+   public static void RotateListRight(List<int> data, int amount)
+{
+    // Step 1: Find the position where the last 'amount' numbers begin.
+    int start = data.Count - amount;
+
+    // Step 2: Copy the last 'amount' numbers into a temporary list.
+    List<int> lastNumbers = data.GetRange(start, amount);
+
+    // Step 3: Remove those numbers from the original list.
+    data.RemoveRange(start, amount);
+
+    // Step 4: Add the temporary list to the beginning of the original list.
+    data.InsertRange(0, lastNumbers);
+}
 }
