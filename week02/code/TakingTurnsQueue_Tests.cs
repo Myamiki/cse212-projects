@@ -1,17 +1,21 @@
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // TODO Problem 1 - Run test cases and record any defects the test code finds in the comment above the test method.
-// DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
-// Fix the code being tested to match requirements and make all tests pass. 
+// DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests.
+// Fix the code being tested to match requirements and make all tests pass.
 
 [TestClass]
 public class TakingTurnsQueueTests
 {
     [TestMethod]
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
-    // run until the queue is empty
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // run until the queue is empty.
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim.
+    // Defect(s) Found: The original PersonQueue.Enqueue method inserted new people at the
+    // beginning of the list instead of the end. This reversed the queue order. The turn-handling
+    // logic also needed to correctly requeue people who still had turns remaining.
+    // Final Test Result: Passed after correcting the queue order and turn-handling logic.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -40,10 +44,13 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
-    // After running 5 times, add George with 3 turns.  Run until the queue is empty.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3).
+    // After running 5 times, add George with 3 turns. Run until the queue is empty.
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George.
+    // Defect(s) Found: The original Enqueue method inserted people at the beginning of the list,
+    // which did not maintain the correct FIFO order. This also affected the order when a new
+    // person was added while the queue was running.
+    // Final Test Result: Passed after correcting Enqueue to add people at the end of the list.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -82,10 +89,13 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3).
     // Run 10 times.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim.
+    // Defect(s) Found: The original turn-handling logic did not correctly keep a person with
+    // zero turns in the queue. A person with zero turns should be treated as having infinite turns.
+    // Final Test Result: Passed after correcting the logic to requeue people with zero turns
+    // without changing their original Turns value.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -113,10 +123,13 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3).
     // Run 10 times.
-    // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim.
+    // Defect(s) Found: The original turn-handling logic did not correctly keep a person with
+    // negative turns in the queue. A negative turn value should also be treated as infinite turns.
+    // Final Test Result: Passed after correcting the logic to requeue people with negative turns
+    // without changing their original Turns value.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -141,9 +154,11 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Try to get the next person from an empty queue
-    // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Scenario: Try to get the next person from an empty queue.
+    // Expected Result: An InvalidOperationException should be thrown with the message
+    // "No one in the queue."
+    // Defect(s) Found: No defect found. The original code correctly handled an empty queue.
+    // Final Test Result: Passed. The expected exception and error message were received.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
